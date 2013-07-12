@@ -200,8 +200,10 @@ public class OFPhysicalPort {
         SPEED_10MB(10),
         SPEED_100MB(100),
         SPEED_1GB(1000),
-        SPEED_10GB(10000);
-
+        SPEED_10GB(10000),
+        SPEED_100GB(100000);
+        
+        
         private long speedInBps;
         private PortSpeed(int speedInMbps) {
             this.speedInBps = speedInMbps * 1000*1000;
@@ -263,6 +265,7 @@ public class OFPhysicalPort {
                 return "10gb-fd (0x40)";
             }
         },
+
         OFPPF_COPPER     (1 << 7, PortSpeed.SPEED_NONE) {
             @Override
             public String toString() {
@@ -292,6 +295,132 @@ public class OFPhysicalPort {
             public String toString() {
                 return "pause-asym (0x800)";
             }
+        },
+        OFPPF_UNKNOWN_12   (1 << 12, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_13   (1 << 13, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_14   (1 << 14, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_15   (1 << 15, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_16   (1 << 16, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_17   (1 << 17, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_18   (1 << 18, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_19   (1 << 19, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_20   (1 << 20, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_21   (1 << 21, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_22   (1 << 22, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_23   (1 << 23, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_24   (1 << 24, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_25   (1 << 25, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_26   (1 << 26, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_27   (1 << 27, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_28   (1 << 28, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_29   (1 << 29, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_30   (1 << 30, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_31   (1 << 31, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
+        },
+        OFPPF_UNKNOWN_32   (1 << 32, PortSpeed.SPEED_NONE) {
+        	@Override
+        	public String toString(){
+        		return "Unknown";
+        	}
         };
 
         protected int value;
