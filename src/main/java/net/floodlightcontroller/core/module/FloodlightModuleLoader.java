@@ -134,11 +134,14 @@ public class FloodlightModuleLoader implements IModuleService {
                         // Make sure they haven't specified duplicate modules in the config
                         int dupInConf = 0;
                         for (IFloodlightModule cMod : mods) {
-                            if (mList.contains(cMod.getClass().getCanonicalName()))
+                            if (mList.contains(cMod.getClass().getCanonicalName())){
                                 dupInConf += 1;
+                                logger.error("Module name: " + cMod.getClass().getCanonicalName());
+                                logger.error("Module: " + cMod.getClass().getName());
+                            }
                         }
                         
-                        if (dupInConf > 1) {
+                        /*if (dupInConf > 1) {
                             String duplicateMods = "";
                             for (IFloodlightModule mod : mods) {
                                 duplicateMods += mod.getClass().getCanonicalName() + ", ";
@@ -147,7 +150,7 @@ public class FloodlightModuleLoader implements IModuleService {
                                     " file specifies more than one module that provides the service " +
                                     s.getCanonicalName() +". Please specify only ONE of the " +
                                     "following modules in the config file: " + duplicateMods);
-                        }
+                        }*/
                     }
                 }
             }

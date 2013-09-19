@@ -1147,6 +1147,8 @@ class OFChannelHandler
          */
         void processOFMessage(OFChannelHandler h, OFMessage m) throws IOException {
             h.roleChanger.checkTimeout();
+            //dispatch message
+            h.dispatchMessage(m);
             switch(m.getType()) {
                 case HELLO:
                     processOFHello(h, (OFHello)m);

@@ -1835,6 +1835,7 @@ public class Controller implements IFloodlightProviderService,
                     }
                     pktinProcTime.recordEndTimePktIn(sw, m, bc);
                 } else {
+                	
                     if (m.getType() != OFType.BARRIER_REPLY)
                         log.warn("Unhandled OF Message: {} from {}", m, sw);
                     else
