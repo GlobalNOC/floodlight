@@ -1045,7 +1045,7 @@ public class Controller implements IFloodlightProviderService,
                 // TODO: if this is the same switch re-connecting rather than
                 // a DPID collision it would make sense to not wipe the flow
                 // table.
-                sw.clearAllFlowMods();
+                //sw.clearAllFlowMods();
                 addUpdateToQueue(new SwitchUpdate(dpid,
                                                   SwitchUpdateType.ADDED));
                 addUpdateToQueue(new SwitchUpdate(dpid,
@@ -1059,8 +1059,8 @@ public class Controller implements IFloodlightProviderService,
                 // The switch isn't known to the controller cluster. We
                 // need to send a switchAdded notification and clear all
                 // flows.
-                if (!swConnectCache.update(sw.getId()))
-                    sw.clearAllFlowMods();
+                //if (!swConnectCache.update(sw.getId()))
+                //    sw.clearAllFlowMods();
                 addUpdateToQueue(new SwitchUpdate(dpid,
                                                   SwitchUpdateType.ADDED));
                 addUpdateToQueue(new SwitchUpdate(dpid,
@@ -1069,9 +1069,9 @@ public class Controller implements IFloodlightProviderService,
             } else {
                 // FIXME: switch was in store. check if ports or anything else
                 // has changed and send update.
-                if (alwaysClearFlowsOnSwActivate) {
-                    sw.clearAllFlowMods();
-                }
+                //if (alwaysClearFlowsOnSwActivate) {
+                //    sw.clearAllFlowMods();
+               // }
                 if (sw.attributeEquals(IOFSwitch.SWITCH_SUPPORTS_NX_ROLE, true)) {
                     // We have a stored switch and the newly activated switch
                     // supports roles. This indicates that the switch was
