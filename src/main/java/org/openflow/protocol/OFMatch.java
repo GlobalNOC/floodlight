@@ -490,7 +490,7 @@ public class OFMatch implements Cloneable, Serializable {
         assert (limit >= 14);
         // dl dst
         this.dataLayerDestination = new byte[6];
-        packetDataBB.get(this.dataLayerDestination);
+       	packetDataBB.get(this.dataLayerDestination);
         // dl src
         this.dataLayerSource = new byte[6];
         packetDataBB.get(this.dataLayerSource);

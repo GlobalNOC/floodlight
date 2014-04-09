@@ -82,6 +82,7 @@ import net.floodlightcontroller.debugevent.IDebugEventService.EventType;
 import net.floodlightcontroller.debugevent.IDebugEventService.MaxEventsRegistered;
 import net.floodlightcontroller.notification.INotificationManager;
 import net.floodlightcontroller.notification.NotificationManagerFactory;
+import net.floodlightcontroller.packet.Ethernet;
 //import net.floodlightcontroller.packet.Ethernet;
 import net.floodlightcontroller.perfmon.IPktInProcessingTimeService;
 import net.floodlightcontroller.restserver.IRestApiService;
@@ -99,6 +100,7 @@ import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.openflow.protocol.OFMessage;
+import org.openflow.protocol.OFPacketIn;
 //import org.openflow.protocol.OFPacketIn;
 import org.openflow.protocol.OFType;
 import org.openflow.protocol.factory.BasicFactory;
@@ -1768,7 +1770,7 @@ public class Controller implements IFloodlightProviderService,
     protected void handleMessage(IOFSwitch sw, OFMessage m,
                                  FloodlightContext bContext)
             throws IOException {
-        //Ethernet eth = null;
+        Ethernet eth = null;
 
         if (this.notifiedRole == Role.SLAVE) {
             counters.dispatchMessageWhileSlave.updateCounterNoFlush();
@@ -1778,7 +1780,7 @@ public class Controller implements IFloodlightProviderService,
         counters.dispatchMessage.updateCounterNoFlush();
 
         switch (m.getType()) {
-            /*case PACKET_IN:
+            case PACKET_IN:
                 OFPacketIn pi = (OFPacketIn)m;
 
                 if (pi.getPacketData().length <= 0) {
@@ -1794,7 +1796,7 @@ public class Controller implements IFloodlightProviderService,
                     counterStore.updatePacketInCountersLocal(sw, m, eth);
                 }
                 // fall through to default case...
-			*/
+			
             default:
 
                 List<IOFMessageListener> listeners = null;
@@ -1813,11 +1815,11 @@ public class Controller implements IFloodlightProviderService,
                     } else {
                         bc = bContext;
                     }
-                    /*if (eth != null) {
+                    if (eth != null) {
                         IFloodlightProviderService.bcStore.put(bc,
                                 IFloodlightProviderService.CONTEXT_PI_PAYLOAD,
                                 eth);
-                    }*/
+                    }
 
                     // Get the starting time (overall and per-component) of
                     // the processing chain for this packet if performance
