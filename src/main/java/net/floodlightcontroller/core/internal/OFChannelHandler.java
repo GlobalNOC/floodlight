@@ -464,7 +464,7 @@ class OFChannelHandler
             }
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
@@ -545,7 +545,7 @@ class OFChannelHandler
 
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
@@ -619,7 +619,7 @@ class OFChannelHandler
                             h.getSwitchInfoString());
                     return;
                 }
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
