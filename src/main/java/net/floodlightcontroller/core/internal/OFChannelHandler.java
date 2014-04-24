@@ -464,7 +464,7 @@ class OFChannelHandler
             }
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
@@ -503,17 +503,17 @@ class OFChannelHandler
             void processOFStatisticsReply(OFChannelHandler h,
                                           OFStatisticsReply  m)
                     throws IOException {
-                illegalMessageReceived(h, m);
+                //illegalMessageReceived(h, m);
             }
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
             void processOFPortStatus(OFChannelHandler h, OFPortStatus m)
                     throws IOException {
-                unhandledMessageReceived(h, m);
+                //unhandledMessageReceived(h, m);
             }
         },
 
@@ -534,18 +534,18 @@ class OFChannelHandler
             void processOFFeaturesReply(OFChannelHandler h, OFFeaturesReply  m)
                     throws IOException {
                 // TODO: we could re-set the features reply
-                illegalMessageReceived(h, m);
+                //illegalMessageReceived(h, m);
             }
             @Override
             void processOFStatisticsReply(OFChannelHandler h,
                                           OFStatisticsReply  m)
                     throws IOException {
-                illegalMessageReceived(h, m);
+                //illegalMessageReceived(h, m);
             }
 
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
@@ -600,7 +600,7 @@ class OFChannelHandler
             void processOFFeaturesReply(OFChannelHandler h, OFFeaturesReply  m)
                     throws IOException {
                 // TODO: we could re-set the features reply
-                illegalMessageReceived(h, m);
+               illegalMessageReceived(h, m);
             }
             @Override
             void processOFStatisticsReply(OFChannelHandler h,
@@ -619,7 +619,7 @@ class OFChannelHandler
                             h.getSwitchInfoString());
                     return;
                 }
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
@@ -1148,6 +1148,7 @@ class OFChannelHandler
         void processOFMessage(OFChannelHandler h, OFMessage m) throws IOException {
             h.roleChanger.checkTimeout();
             //dispatch message
+            log.debug(m.getType().toString());
             h.dispatchMessage(m);
             switch(m.getType()) {
                 case HELLO:
@@ -1509,54 +1510,8 @@ class OFChannelHandler
                     counters.messageInputThrottled.updateCounterNoFlush();
                     continue;
                 }
-                try {
-                    if (this.controller.overload_drop &&
-                        !loadlevel.equals(LoadMonitor.LoadLevel.OK)) {
-                        switch (ofm.getType()) {
-                        case PACKET_IN:
-                            switch (loadlevel) {
-                            case VERYHIGH:
-                                // Drop all packet-ins, including LLDP/BDDPs
-                                packets_dropped++;
-                                continue;
-                            case HIGH:
-                                // Drop all packet-ins, except LLDP/BDDPs
-                                byte[] data = ((OFPacketIn)ofm).getPacketData();
-                                if (data.length > 14) {
-                                    if (((data[12] == (byte)0x88) &&
-                                         (data[13] == (byte)0xcc)) ||
-                                        ((data[12] == (byte)0x89) &&
-                                         (data[13] == (byte)0x42))) {
-                                        lldps_allowed++;
-                                        packets_allowed++;
-                                        break;
-                                    }
-                                }
-                                packets_dropped++;
-                                continue;
-                            default:
-                                // Load not high, go ahead and process msg
-                                packets_allowed++;
-                                break;
-                            }
-                            break;
-                        default:
-                            // Process all non-packet-ins
-                            packets_allowed++;
-                            break;
-                        }
-                    }
-
-                    // Do the actual packet processing
-                    state.processOFMessage(this, ofm);
-
-                }
-                catch (Exception ex) {
-                    // We are the last handler in the stream, so run the
-                    // exception through the channel again by passing in
-                    // ctx.getChannel().
-                    Channels.fireExceptionCaught(ctx.getChannel(), ex);
-                }
+                // Do the actual packet processing
+                state.processOFMessage(this, ofm);
             }
 
             if (loadlevel != LoadMonitor.LoadLevel.OK) {
