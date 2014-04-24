@@ -507,7 +507,7 @@ class OFChannelHandler
             }
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
-                logErrorDisconnect(h, m);
+                //logErrorDisconnect(h, m);
             }
 
             @Override
