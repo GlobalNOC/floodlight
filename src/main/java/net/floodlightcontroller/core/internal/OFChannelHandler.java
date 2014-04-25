@@ -504,16 +504,19 @@ class OFChannelHandler
                                           OFStatisticsReply  m)
                     throws IOException {
                 //illegalMessageReceived(h, m);
+            	return;
             }
             @Override
             void processOFError(OFChannelHandler h, OFError m) {
                 //logErrorDisconnect(h, m);
+            	return;
             }
 
             @Override
             void processOFPortStatus(OFChannelHandler h, OFPortStatus m)
                     throws IOException {
                 //unhandledMessageReceived(h, m);
+            	return;
             }
         },
 
@@ -620,6 +623,7 @@ class OFChannelHandler
                     return;
                 }
                 //logErrorDisconnect(h, m);
+                return;
             }
 
             @Override
