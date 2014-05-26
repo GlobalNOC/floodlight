@@ -33,6 +33,9 @@ import org.openflow.protocol.vendor.OFByteArrayVendorData;
 import org.openflow.protocol.vendor.OFVendorData;
 import org.openflow.protocol.vendor.OFVendorDataType;
 import org.openflow.protocol.vendor.OFVendorId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /**
@@ -47,7 +50,8 @@ public enum BasicFactory implements OFMessageFactory, OFActionFactory,
         OFStatisticsFactory, OFVendorDataFactory {
     SINGLETON_INSTANCE;
 
-
+    private static final Logger log = LoggerFactory.getLogger(org.openflow.protocol.factory.MessageParseException.class );
+    
     private final OFVendorActionRegistry vendorActionRegistry;
 
     private BasicFactory() {
@@ -114,18 +118,24 @@ public enum BasicFactory implements OFMessageFactory, OFActionFactory,
 
             ofm = getMessage(demux.getType());
             
-            if (ofm == null)
-                return null;
-
-            if(ofm.getLength() < demux.getLength())
+            if (ofm == null){
+            	log.error("unable to get message type");
             	return null;
+            }
             
+
             injectFactories(ofm);
             ofm.readFrom(data);
+            
+            if(ofm.getLength() != demux.getLength()){
+            	log.error("parsed flow length: " + ofm.getLength() + " specified length: " + demux.getLength());
+            	log.error("message length does not match parsed message length");
+            	return null;
+            }
+            
             if (OFMessage.class.equals(ofm.getClass())) {
                 // advance the position for un-implemented messages
-                data.readerIndex(data.readerIndex()+(ofm.getLengthU() -
-                        OFMessage.MINIMUM_LENGTH));
+                data.readerIndex(data.readerIndex() + (ofm.getLengthU() - OFMessage.MINIMUM_LENGTH));
             }
             
             
