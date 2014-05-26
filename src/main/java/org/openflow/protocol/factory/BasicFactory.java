@@ -113,9 +113,13 @@ public enum BasicFactory implements OFMessageFactory, OFActionFactory,
                 return ofm;
 
             ofm = getMessage(demux.getType());
+            
             if (ofm == null)
                 return null;
 
+            if(ofm.getLength() < demux.getLength())
+            	return null;
+            
             injectFactories(ofm);
             ofm.readFrom(data);
             if (OFMessage.class.equals(ofm.getClass())) {
@@ -123,7 +127,9 @@ public enum BasicFactory implements OFMessageFactory, OFActionFactory,
                 data.readerIndex(data.readerIndex()+(ofm.getLengthU() -
                         OFMessage.MINIMUM_LENGTH));
             }
-
+            
+            
+            
             return ofm;
         } catch (Exception e) {
             /* Write the offending data along with the error message */
