@@ -89,11 +89,6 @@ public class FloodlightTestCase extends TestCase {
         mockFloodlightProvider = new MockFloodlightProvider();
     }
 
-    @Test
-    public void testSanity() throws Exception {
-    	assertTrue(true);
-    }
-
     public static OFPhysicalPort createOFPhysicalPort(String name, int number) {
         OFPhysicalPort p = new OFPhysicalPort();
         p.setHardwareAddress(new byte [] { 0, 0, 0, 0, 0, 0 });

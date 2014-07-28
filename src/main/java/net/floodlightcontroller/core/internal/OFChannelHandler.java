@@ -1151,15 +1151,15 @@ class OFChannelHandler
          */
         void processOFMessage(OFChannelHandler h, OFMessage m) throws IOException {
             h.roleChanger.checkTimeout();
-            //dispatch message
+            
             log.debug(m.getType().toString());
-            h.dispatchMessage(m);
             switch(m.getType()) {
                 case HELLO:
                     processOFHello(h, (OFHello)m);
                     break;
                 case BARRIER_REPLY:
                     processOFBarrierReply(h, (OFBarrierReply)m);
+                    h.dispatchMessage(m);
                     break;
                 case ECHO_REPLY:
                     processOFEchoReply(h, (OFEchoReply)m);
