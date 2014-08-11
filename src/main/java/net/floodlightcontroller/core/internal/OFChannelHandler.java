@@ -1184,6 +1184,7 @@ class OFChannelHandler
                     break;
                 case PORT_STATUS:
                     processOFPortStatus(h, (OFPortStatus)m);
+                    h.dispatchMessage(m);
                     break;
                 case QUEUE_GET_CONFIG_REPLY:
                     processOFQueueGetConfigReply(h, (OFQueueGetConfigReply)m);
