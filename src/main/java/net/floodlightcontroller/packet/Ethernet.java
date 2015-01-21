@@ -255,7 +255,8 @@ public class Ethernet extends BasePacket {
             this.vlanID = VLAN_UNTAGGED;
         }
         this.etherType = etherType;
-        
+        byte[] payloadData = new byte[data.length - bb.position()];
+        System.arraycopy(data, bb.position(), payloadData, 0, data.length - bb.position());
         IPacket payload;
         if (Ethernet.etherTypeClassMap.containsKey(this.etherType)) {
             Class<? extends IPacket> clazz = Ethernet.etherTypeClassMap.get(this.etherType);
@@ -271,27 +272,27 @@ public class Ethernet extends BasePacket {
                                           clazz.getClass().getName()});
                     log.trace("Exception from parsing {}", e);
                 }
-                this.payload = new Data(data);
+                this.payload = new Data(payloadData);
             } catch (InstantiationException e) {
                 if (log.isTraceEnabled()) {
                     log.trace("Fail to instantiate class {}, {}",
                               clazz.getClass().getName(), e);
                 }
-                this.payload = new Data(data);
+                this.payload = new Data(payloadData);
             } catch (IllegalAccessException e) {
                 if (log.isTraceEnabled()) {
                     log.trace("Fail to access class for instantiation {}, {}",
                               clazz.getClass().getName(), e);
                 }
-                this.payload = new Data(data);
+                this.payload = new Data(payloadData);
             } catch (RuntimeException e) {
                 if (log.isTraceEnabled()) {
                     log.trace("Runtime exception during packet parsing {}", e);
                 }
-                this.payload = new Data(data);
+                this.payload = new Data(payloadData);
             }
         } else {
-            this.payload = new Data(data);
+            this.payload = new Data(payloadData);
         }
         this.payload.setParent(this);
         return this;
