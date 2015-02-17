@@ -17,6 +17,9 @@
 
 package org.openflow.protocol;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -642,6 +645,63 @@ public class OFMatch implements Cloneable, Serializable {
         data.writeInt(networkDestination);
         data.writeShort(transportSource);
         data.writeShort(transportDestination);
+    }
+    
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+        //stream.defaultReadObject();
+        this.wildcards = stream.readInt();
+        this.inputPort = stream.readShort();
+        this.dataLayerSource = new byte[6];
+        this.dataLayerSource[0] = stream.readByte();
+        this.dataLayerSource[1] = stream.readByte();
+        this.dataLayerSource[2] = stream.readByte();
+        this.dataLayerSource[3] = stream.readByte();
+        this.dataLayerSource[4] = stream.readByte();
+        this.dataLayerSource[5] = stream.readByte();
+        this.dataLayerDestination = new byte[6];
+        this.dataLayerDestination[0] = stream.readByte();
+        this.dataLayerDestination[1] = stream.readByte();
+        this.dataLayerDestination[2] = stream.readByte();
+        this.dataLayerDestination[3] = stream.readByte();
+        this.dataLayerDestination[4] = stream.readByte();
+        this.dataLayerDestination[5] = stream.readByte();
+        this.dataLayerVirtualLan = stream.readShort();
+        this.dataLayerVirtualLanPriorityCodePoint = stream.readByte();
+        this.dataLayerType = stream.readShort();
+        this.networkTypeOfService = stream.readByte();
+        this.networkProtocol = stream.readByte();
+        this.networkSource = stream.readInt();
+        this.networkDestination = stream.readInt();
+        this.transportSource = stream.readShort();
+        this.transportDestination = stream.readShort();
+         
+    }
+     
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+        //stream.defaultWriteObject();
+        stream.writeInt(wildcards);
+        stream.writeShort(inputPort);
+        stream.writeByte(this.dataLayerSource[0]);
+        stream.writeByte(this.dataLayerSource[1]);
+        stream.writeByte(this.dataLayerSource[2]);
+        stream.writeByte(this.dataLayerSource[3]);
+        stream.writeByte(this.dataLayerSource[4]);
+        stream.writeByte(this.dataLayerSource[5]);
+        stream.writeByte(this.dataLayerDestination[0]);
+        stream.writeByte(this.dataLayerDestination[1]);
+        stream.writeByte(this.dataLayerDestination[2]);
+        stream.writeByte(this.dataLayerDestination[3]);
+        stream.writeByte(this.dataLayerDestination[4]);
+        stream.writeByte(this.dataLayerDestination[5]);
+        stream.writeShort(dataLayerVirtualLan);
+        stream.writeByte(dataLayerVirtualLanPriorityCodePoint);
+        stream.writeShort(dataLayerType);
+        stream.writeByte(networkTypeOfService);
+        stream.writeByte(networkProtocol);
+        stream.writeInt(networkSource);
+        stream.writeInt(networkDestination);
+        stream.writeShort(transportSource);
+        stream.writeShort(transportDestination);
     }
 
     @Override

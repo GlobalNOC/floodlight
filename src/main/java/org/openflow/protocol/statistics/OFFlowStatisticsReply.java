@@ -17,6 +17,9 @@
 
 package org.openflow.protocol.statistics;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,9 +34,10 @@ import org.openflow.util.U16;
  * Represents an ofp_flow_stats structure
  * @author David Erickson (daviderickson@cs.stanford.edu)
  */
-public class OFFlowStatisticsReply implements OFStatistics, OFActionFactoryAware {
+public class OFFlowStatisticsReply implements OFStatistics, OFActionFactoryAware,Serializable {
     public static int MINIMUM_LENGTH = 88;
-
+    private static final long serialVersionUID = -1322322139926390329L;
+    
     protected OFActionFactory actionFactory;
     protected short length = (short) MINIMUM_LENGTH;
     protected byte tableId;
@@ -47,6 +51,7 @@ public class OFFlowStatisticsReply implements OFStatistics, OFActionFactoryAware
     protected long packetCount;
     protected long byteCount;
     protected List<OFAction> actions;
+   
 
     /**
      * @return the tableId
@@ -269,20 +274,70 @@ public class OFFlowStatisticsReply implements OFStatistics, OFActionFactoryAware
             }
         }
     }
+    
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+    	stream.defaultWriteObject( );
+    	stream.writeShort(this.length);
+        stream.writeByte(this.tableId);
+        this.match.writeObject(stream);
+        stream.writeInt(this.durationSeconds);
+        stream.writeInt(this.durationNanoseconds);
+        stream.writeShort(this.priority);
+        stream.writeShort(this.idleTimeout);
+        stream.writeShort(this.hardTimeout);
+        stream.writeLong(this.cookie);
+        stream.writeLong(this.packetCount);
+        stream.writeLong(this.byteCount);
+        
+        stream.writeInt(this.actions.size());
+        if (actions != null) {
+            Iterator<OFAction> actionIt  = actions.iterator();
+            
+            while(actionIt.hasNext()){
+            	OFAction action = (OFAction)actionIt.next();
+            	action.writeObject(stream);
+            }
+        }
+    }
+ 
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+    	stream.defaultReadObject( );
+    	this.length = stream.readShort();
+    	this.tableId = stream.readByte();
+    	this.match = new OFMatch();
+    	this.match.readObject(stream);
+    	this.durationSeconds = stream.readInt();
+    	this.durationNanoseconds = stream.readInt();
+    	this.priority = stream.readShort();
+    	this.idleTimeout = stream.readShort();
+    	this.hardTimeout = stream.readShort();
+    	this.cookie = stream.readLong();
+    	this.packetCount = stream.readLong();
+    	this.byteCount = stream.readLong();
+    	int num_actions = stream.readInt();
+    	this.actions = new ArrayList<OFAction>();
+    	
+    	for(int i=0; i< num_actions; i++){
+    		OFAction act = OFAction.readFromInputStream(stream);
+    		this.actions.add(act);
+    	}
+    	
+    }
 
     @Override
     public String toString() {
-    	String str = "match=" + this.match;
-    	str += " tableId=" + this.tableId;
-    	str += " durationSeconds=" + this.durationSeconds;
-    	str += " durationNanoseconds=" + this.durationNanoseconds;
-    	str += " priority=" + this.priority;
-    	str += " idleTimeout=" + this.idleTimeout;
-    	str += " hardTimeout=" + this.hardTimeout;
-        str += " cookie=" + Long.toHexString(this.cookie);
-    	str += " packetCount=" + this.packetCount;
-    	str += " byteCount=" + this.byteCount;
-    	str += " action=" + this.actions;
+    	String str = "OFFlowStatisticsReply{match=" + this.match;
+    	str += ", tableId=" + this.tableId;
+    	str += ", durationSeconds=" + this.durationSeconds;
+    	str += ", durationNanoseconds=" + this.durationNanoseconds;
+    	str += ", priority=" + this.priority;
+    	str += ", idleTimeout=" + this.idleTimeout;
+    	str += ", hardTimeout=" + this.hardTimeout;
+        str += ", cookie=" + Long.toHexString(this.cookie);
+    	str += ", packetCount=" + this.packetCount;
+    	str += ", byteCount=" + this.byteCount;
+    	str += ", action=" + this.actions;
+    	str += "}";
     	
     	return str;
     }

@@ -30,7 +30,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author Andreas Wundsam <andreas.wundsam@bigswitch.com>
  */
 public class OFActionVendorGeneric extends OFActionVendor {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8411756176021474622L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     private final static byte[] EMPTY_ARRAY = new byte[0];
 

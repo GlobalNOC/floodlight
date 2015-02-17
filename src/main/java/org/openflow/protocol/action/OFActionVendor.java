@@ -25,7 +25,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author David Erickson (daviderickson@cs.stanford.edu)
  */
 public abstract class OFActionVendor extends OFAction {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8696088362170069657L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     protected int vendor;
 

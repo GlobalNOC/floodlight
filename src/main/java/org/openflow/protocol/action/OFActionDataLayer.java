@@ -20,6 +20,9 @@
  */
 package org.openflow.protocol.action;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 
 import net.floodlightcontroller.core.web.serializers.ByteArrayMACSerializer;
@@ -34,7 +37,12 @@ import org.openflow.protocol.OFPhysicalPort;
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
 public abstract class OFActionDataLayer extends OFAction {
-    public static int MINIMUM_LENGTH = 16;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 49646847501158752L;
+
+	public static int MINIMUM_LENGTH = 16;
 
     protected byte[] dataLayerAddress;
 
@@ -69,6 +77,18 @@ public abstract class OFActionDataLayer extends OFAction {
         data.writeBytes(this.dataLayerAddress);
         data.writeInt(0);
         data.writeShort((short) 0);
+    }
+    
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+    	this.dataLayerAddress = new byte[OFPhysicalPort.OFP_ETH_ALEN];
+    	stream.read(this.dataLayerAddress);
+    	stream.readShort();
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+    	super.writeObject(stream);
+    	stream.write(this.dataLayerAddress);
+    	stream.writeShort((short)0);
     }
 
     @Override

@@ -29,7 +29,11 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
 public class OFActionStripVirtualLan extends OFAction {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -7202821687154345689L;
+	public static int MINIMUM_LENGTH = 8;
 
     public OFActionStripVirtualLan() {
         super();

@@ -21,6 +21,10 @@
 package org.openflow.protocol.action;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
@@ -28,7 +32,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author Rob Sherwood (rob.sherwood@stanford.edu)
  */
 public class OFActionOutput extends OFAction implements Cloneable {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8350117223545241780L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     protected short port;
     protected short maxLength;
@@ -116,6 +125,17 @@ public class OFActionOutput extends OFAction implements Cloneable {
         data.writeShort(maxLength);
     }
 
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+    	this.port = stream.readShort();
+    	this.maxLength = stream.readShort();
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+    	super.writeObject(stream);
+    	stream.writeShort(this.port);
+    	stream.writeShort(this.maxLength);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 367;

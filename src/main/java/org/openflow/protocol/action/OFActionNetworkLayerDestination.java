@@ -22,7 +22,12 @@ package org.openflow.protocol.action;
  * @author David Erickson (daviderickson@cs.stanford.edu)
  */
 public class OFActionNetworkLayerDestination extends OFActionNetworkLayerAddress {
-    public OFActionNetworkLayerDestination() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1846100812053949990L;
+
+	public OFActionNetworkLayerDestination() {
         super();
         super.setType(OFActionType.SET_NW_DST);
         super.setLength((short) OFActionNetworkLayerAddress.MINIMUM_LENGTH);

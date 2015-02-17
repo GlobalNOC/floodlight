@@ -21,6 +21,10 @@
 package org.openflow.protocol.action;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
@@ -28,7 +32,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
 public abstract class OFActionTransportLayer extends OFAction {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2259419668464122408L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     protected short transportPort;
 
@@ -60,6 +69,15 @@ public abstract class OFActionTransportLayer extends OFAction {
         data.writeShort((short) 0);
     }
 
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+    	this.transportPort = stream.readShort();
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+    	super.writeObject(stream);
+    	stream.writeShort(this.transportPort);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 373;

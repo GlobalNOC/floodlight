@@ -18,6 +18,11 @@
 package org.openflow.protocol.action;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.openflow.util.U16;
 
@@ -26,7 +31,7 @@ import org.openflow.util.U16;
  *
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
-public class OFAction implements Cloneable {
+public class OFAction implements Cloneable, Serializable {
     /**
      * Note the true minimum length for this header is 8 including a pad to 64
      * bit alignment, however as this base class is used for demuxing an
@@ -34,6 +39,7 @@ public class OFAction implements Cloneable {
      * Actions extending this class are responsible for reading/writing the
      * first 8 bytes, including the pad if necessary.
      */
+	private static final long serialVersionUID = -1322322139926390328L;
     public static int MINIMUM_LENGTH = 4;
     public static int OFFSET_LENGTH = 2;
     public static int OFFSET_TYPE = 0;
@@ -96,6 +102,73 @@ public class OFAction implements Cloneable {
             ";t=" + this.getType() +
             ";l=" + this.getLength();
     }
+    
+    public static OFAction readFromInputStream(ObjectInputStream ois) throws ClassNotFoundException, IOException{
+        OFActionType type = (OFActionType.valueOf((short)ois.readInt()));
+        short length = ois.readShort();
+        switch(type){
+		case OUTPUT:
+			OFActionOutput output = new OFActionOutput();
+			output.readObject(ois);
+			return output;
+		case SET_DL_DST:
+			OFActionDataLayerDestination set_dl_dst = new OFActionDataLayerDestination();
+			set_dl_dst.readObject(ois);
+			return set_dl_dst;
+		case SET_DL_SRC:
+			OFActionDataLayerSource set_dl_src = new OFActionDataLayerSource();
+			set_dl_src.readObject(ois);
+			return set_dl_src;
+		case SET_NW_DST:
+			OFActionNetworkLayerDestination set_nw_dst = new OFActionNetworkLayerDestination();
+			set_nw_dst.readObject(ois);
+			return set_nw_dst;
+		case SET_NW_SRC:
+			OFActionNetworkLayerSource set_nw_src = new OFActionNetworkLayerSource();
+			set_nw_src.readObject(ois);
+			return set_nw_src;
+		case SET_NW_TOS:
+			OFActionNetworkTypeOfService set_nw_tos = new OFActionNetworkTypeOfService();
+			set_nw_tos.readObject(ois);
+			return set_nw_tos;
+		case SET_TP_DST:
+			OFActionTransportLayerDestination set_tp_dst = new OFActionTransportLayerDestination();
+			set_tp_dst.readObject(ois);
+			return set_tp_dst;
+		case SET_TP_SRC:
+			OFActionTransportLayerSource set_tp_src = new OFActionTransportLayerSource();
+			set_tp_src.readObject(ois);
+			return set_tp_src;
+		case SET_VLAN_ID:
+			OFActionVirtualLanIdentifier set_vlan_vid = new OFActionVirtualLanIdentifier();
+			set_vlan_vid.readObject(ois);
+			return set_vlan_vid;
+		case SET_VLAN_PCP:
+			OFActionVirtualLanPriorityCodePoint set_vlan_pcp = new OFActionVirtualLanPriorityCodePoint();
+			set_vlan_pcp.readObject(ois);
+			return set_vlan_pcp;
+		case STRIP_VLAN:
+			OFActionStripVirtualLan strip_vlan = new OFActionStripVirtualLan();
+			return strip_vlan;
+		case VENDOR:
+			OFActionVendor vendor = new OFActionVendorGeneric();
+			return vendor;
+		case OPAQUE_ENQUEUE:
+			OFActionEnqueue queue = new OFActionEnqueue();
+			queue.readObject(ois);
+			return queue;
+		default:
+			return new OFAction();
+        }
+			
+    }
+     
+    public void writeObject(ObjectOutputStream oos) throws IOException{
+        //oos.defaultWriteObject();
+        oos.writeInt(this.getType().getTypeValue());
+        oos.writeShort(this.getLength());
+    }
+    
     
     /**
      * Given the output from toString(), 

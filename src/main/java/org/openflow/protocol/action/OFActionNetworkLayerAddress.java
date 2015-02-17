@@ -21,6 +21,10 @@
 package org.openflow.protocol.action;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import net.floodlightcontroller.packet.IPv4;
 
 import org.jboss.netty.buffer.ChannelBuffer;
@@ -30,7 +34,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
 public abstract class OFActionNetworkLayerAddress extends OFAction {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1332767673988606333L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     protected int networkAddress;
 
@@ -60,6 +69,15 @@ public abstract class OFActionNetworkLayerAddress extends OFAction {
         data.writeInt(this.networkAddress);
     }
 
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+    	this.networkAddress = stream.readInt();
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+    	super.writeObject(stream);
+    	stream.writeInt(this.networkAddress);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 353;

@@ -21,6 +21,10 @@
 package org.openflow.protocol.action;
 
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
@@ -28,7 +32,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
 public class OFActionVirtualLanIdentifier extends OFAction {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 698827973512867970L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     protected short virtualLanIdentifier;
 
@@ -68,6 +77,14 @@ public class OFActionVirtualLanIdentifier extends OFAction {
         super.writeTo(data);
         data.writeShort(this.virtualLanIdentifier);
         data.writeShort((short) 0);
+    }
+    
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+    	this.virtualLanIdentifier = stream.readShort();
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+    	stream.writeShort(virtualLanIdentifier);
     }
 
     @Override

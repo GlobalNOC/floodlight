@@ -20,6 +20,10 @@
  */
 package org.openflow.protocol.action;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import org.jboss.netty.buffer.ChannelBuffer;
 
 /**
@@ -27,7 +31,12 @@ import org.jboss.netty.buffer.ChannelBuffer;
  * @author David Erickson (daviderickson@cs.stanford.edu) - Mar 11, 2010
  */
 public class OFActionNetworkTypeOfService extends OFAction {
-    public static int MINIMUM_LENGTH = 8;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6316515484196139716L;
+
+	public static int MINIMUM_LENGTH = 8;
 
     protected byte networkTypeOfService;
 
@@ -72,6 +81,15 @@ public class OFActionNetworkTypeOfService extends OFAction {
         data.writeByte((byte) 0);
     }
 
+    public void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException{
+    	this.networkTypeOfService = stream.readByte();
+    }
+    
+    public void writeObject(ObjectOutputStream stream) throws IOException{
+    	super.writeObject(stream);
+    	stream.writeByte(this.networkTypeOfService);
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 359;
