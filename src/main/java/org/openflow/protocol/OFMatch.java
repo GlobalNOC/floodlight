@@ -736,50 +736,22 @@ public class OFMatch implements Cloneable, Serializable {
             return false;
         }
         OFMatch other = (OFMatch) obj;
-        if (!Arrays.equals(dataLayerDestination, other.dataLayerDestination)) {
+        if ((wildcards & OFMatch.OFPFW_ALL) != (other.wildcards & OFPFW_ALL)) {
             return false;
         }
-        if (!Arrays.equals(dataLayerSource, other.dataLayerSource)) {
-            return false;
-        }
-        if (dataLayerType != other.dataLayerType) {
-            return false;
-        }
-        if (dataLayerVirtualLan != other.dataLayerVirtualLan) {
-            return false;
-        }
-        if (dataLayerVirtualLanPriorityCodePoint != other.dataLayerVirtualLanPriorityCodePoint) {
-            return false;
-        }
-        if (inputPort != other.inputPort) {
-            return false;
-        }
-        if (networkDestination != other.networkDestination) {
-            return false;
-        }
-        if (networkProtocol != other.networkProtocol) {
-            return false;
-        }
-        if (networkSource != other.networkSource) {
-            return false;
-        }
-        if (networkTypeOfService != other.networkTypeOfService) {
-            return false;
-        }
-        if (transportDestination != other.transportDestination) {
-            return false;
-        }
-        if (transportSource != other.transportSource) {
-            return false;
-        }
-        if ((wildcards & OFMatch.OFPFW_ALL) != (other.wildcards & OFPFW_ALL)) { // only
-            // consider
-            // allocated
-            // part
-            // of
-            // wildcards
-            return false;
-        }
+        if (((wildcards & OFPFW_IN_PORT) == 0) && other.getInputPort() != inputPort) return false;
+        if (((wildcards & OFPFW_DL_DST) == 0) && !Arrays.equals(other.getDataLayerDestination(), dataLayerDestination)) return false;
+        if (((wildcards & OFPFW_DL_SRC) == 0) && !Arrays.equals(other.getDataLayerSource(), dataLayerSource)) return false;
+        if (((wildcards & OFPFW_DL_TYPE) == 0) && other.getDataLayerType() != dataLayerType) return false;
+        if (((wildcards & OFPFW_DL_VLAN) == 0) && other.getDataLayerVirtualLan() != dataLayerVirtualLan) return false;
+        if (((wildcards & OFPFW_DL_VLAN_PCP) == 0) && other.getDataLayerVirtualLanPriorityCodePoint() != dataLayerVirtualLanPriorityCodePoint) return false;
+        if ((getNetworkDestinationMaskLen() > 0) && other.getNetworkDestination() != networkDestination) return false;
+        if ((getNetworkSourceMaskLen() > 0) && other.getNetworkSource() != networkSource) return false;
+        if (((wildcards & OFPFW_NW_PROTO) == 0) && other.getNetworkProtocol() != networkProtocol) return false;
+        if (((wildcards & OFPFW_NW_TOS) == 0) && other.getNetworkTypeOfService() != networkTypeOfService) return false;
+        if (((wildcards & OFPFW_TP_DST) == 0) && other.getTransportDestination() != transportDestination) return false;
+        if (((wildcards & OFPFW_TP_SRC) == 0) && other.getTransportSource() != transportSource) return false;
+        
         return true;
     }
 
