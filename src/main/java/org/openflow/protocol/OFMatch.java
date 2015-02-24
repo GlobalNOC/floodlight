@@ -26,6 +26,8 @@ import java.util.Arrays;
 
 import net.floodlightcontroller.packet.Ethernet;
 
+import ch.qos.logback.classic.Logger;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.openflow.protocol.serializers.OFMatchJSONSerializer;
@@ -742,21 +744,32 @@ public class OFMatch implements Cloneable, Serializable {
         
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.IN_PORT) !=
         		other.getWildcardObj().isWildcarded(Wildcards.Flag.IN_PORT)) return false;
+      
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_DST) !=
-        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_DST)) return false;        
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_DST)) return false;   
+        
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_SRC) !=
         		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_SRC)) return false;
+        
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_TYPE) !=
         		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_TYPE)) return false;
+        
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN) !=
         		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN)) return false;
+        
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN_PCP) !=
         		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN_PCP)) return false;
+        
         if(this.getWildcardObj().isWildcarded(Wildcards.Flag.NW_PROTO) !=
         		other.getWildcardObj().isWildcarded(Wildcards.Flag.NW_PROTO)) return false;
-        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.TP_SRC) !=
-        		other.getWildcardObj().isWildcarded(Wildcards.Flag.TP_DST)) return false;
         
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.TP_SRC) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.TP_SRC)) return false;
+        		
+   		if(this.getWildcardObj().isWildcarded(Wildcards.Flag.TP_DST) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.TP_DST)) return false;
+        		
+ 
         if (((wildcards & OFPFW_IN_PORT) == 0) && other.getInputPort() != inputPort) return false;
         if (((wildcards & OFPFW_DL_DST) == 0) && !Arrays.equals(other.getDataLayerDestination(), dataLayerDestination)) return false;
         if (((wildcards & OFPFW_DL_SRC) == 0) && !Arrays.equals(other.getDataLayerSource(), dataLayerSource)) return false;
