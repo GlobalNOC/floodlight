@@ -736,9 +736,27 @@ public class OFMatch implements Cloneable, Serializable {
             return false;
         }
         OFMatch other = (OFMatch) obj;
-        if ((wildcards & OFMatch.OFPFW_ALL) != (other.wildcards & OFPFW_ALL)) {
-            return false;
-        }
+
+        //so a direct comparison of integers doesn't work because there are multiple ways to represent things
+        //the best we can do is compare each possible match and try it
+        
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.IN_PORT) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.IN_PORT)) return false;
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_DST) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_DST)) return false;        
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_SRC) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_SRC)) return false;
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_TYPE) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_TYPE)) return false;
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN)) return false;
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN_PCP) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.DL_VLAN_PCP)) return false;
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.NW_PROTO) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.NW_PROTO)) return false;
+        if(this.getWildcardObj().isWildcarded(Wildcards.Flag.TP_SRC) !=
+        		other.getWildcardObj().isWildcarded(Wildcards.Flag.TP_DST)) return false;
+        
         if (((wildcards & OFPFW_IN_PORT) == 0) && other.getInputPort() != inputPort) return false;
         if (((wildcards & OFPFW_DL_DST) == 0) && !Arrays.equals(other.getDataLayerDestination(), dataLayerDestination)) return false;
         if (((wildcards & OFPFW_DL_SRC) == 0) && !Arrays.equals(other.getDataLayerSource(), dataLayerSource)) return false;
